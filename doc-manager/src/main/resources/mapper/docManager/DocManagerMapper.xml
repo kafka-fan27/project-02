@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.docManager.mapper.DocManagerMapper">
+    
+    <resultMap type="DocManager" id="DocManagerResult">
+        <result property="id"    column="id"    />
+        <result property="docOrder"    column="doc_order"    />
+        <result property="docTitle"    column="doc_title"    />
+        <result property="docUrl"    column="doc_url"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="docDate"    column="doc_date"    />
+    </resultMap>
+
+    <sql id="selectDocManagerVo">
+        select id, doc_order, doc_title, doc_url, dept_id, doc_date from tjdw_doc_manager
+    </sql>
+
+    <select id="selectDocManagerList" parameterType="DocManager" resultMap="DocManagerResult">
+        <include refid="selectDocManagerVo"/>
+        <where>  
+            <if test="docOrder != null  and docOrder != ''"> and doc_order = #{docOrder}</if>
+            <if test="docTitle != null  and docTitle != ''"> and doc_title = #{docTitle}</if>
+            <if test="docUrl != null  and docUrl != ''"> and doc_url = #{docUrl}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="docDate != null "> and doc_date = #{docDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectDocManagerById" parameterType="Long" resultMap="DocManagerResult">
+        <include refid="selectDocManagerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDocManager" parameterType="DocManager" useGeneratedKeys="true" keyProperty="id">
+        insert into tjdw_doc_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="docOrder != null and docOrder != ''">doc_order,</if>
+            <if test="docTitle != null and docTitle != ''">doc_title,</if>
+            <if test="docUrl != null">doc_url,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="docDate != null">doc_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="docOrder != null and docOrder != ''">#{docOrder},</if>
+            <if test="docTitle != null and docTitle != ''">#{docTitle},</if>
+            <if test="docUrl != null">#{docUrl},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="docDate != null">#{docDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDocManager" parameterType="DocManager">
+        update tjdw_doc_manager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="docOrder != null and docOrder != ''">doc_order = #{docOrder},</if>
+            <if test="docTitle != null and docTitle != ''">doc_title = #{docTitle},</if>
+            <if test="docUrl != null">doc_url = #{docUrl},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="docDate != null">doc_date = #{docDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDocManagerById" parameterType="Long">
+        delete from tjdw_doc_manager where id = #{id}
+    </delete>
+
+    <delete id="deleteDocManagerByIds" parameterType="String">
+        delete from tjdw_doc_manager where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
