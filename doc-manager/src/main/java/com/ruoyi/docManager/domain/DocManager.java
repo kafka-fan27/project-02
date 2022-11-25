@@ -2,6 +2,8 @@ package com.ruoyi.docManager.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.annotation.Excels;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -19,7 +21,6 @@ public class DocManager extends BaseEntity
 
     /** NO */
     private Long id;
-
     /** 发文号 */
     @Excel(name = "发文号")
     private String docOrder;
@@ -40,6 +41,12 @@ public class DocManager extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "发文日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date docDate;
+
+    @Excels({
+            @Excel(name = "部门名称", targetAttr = "deptName", type = Excel.Type.EXPORT),
+            @Excel(name = "部门负责人", targetAttr = "leader", type = Excel.Type.EXPORT)
+    })
+    private SysDept dept;
 
     public void setId(Long id) 
     {
@@ -94,6 +101,14 @@ public class DocManager extends BaseEntity
     public Date getDocDate() 
     {
         return docDate;
+    }
+
+    public SysDept getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+        this.dept = dept;
     }
 
     @Override

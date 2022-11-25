@@ -51,6 +51,7 @@ public class DocManagerController extends BaseController
     {
         startPage();
         List<DocManager> list = docManagerService.selectDocManagerList(docManager);
+        System.out.println(list);
         return getDataTable(list);
     }
 
@@ -123,5 +124,15 @@ public class DocManagerController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(docManagerService.deleteDocManagerByIds(ids));
+    }
+
+    /*
+    * 转发测试
+    *
+    * */
+
+    @GetMapping("/sendDoc")
+    public String sendDoc(){
+        return "ok!";
     }
 }

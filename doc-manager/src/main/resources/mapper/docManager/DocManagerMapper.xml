@@ -6,28 +6,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="DocManager" id="DocManagerResult">
         <result property="id"    column="id"    />
-        <result property="docOrder"    column="doc_order"    />
-        <result property="docTitle"    column="doc_title"    />
+        <result property="docOrder"  column="doc_order"    />
+        <result property="docTitle"  column="doc_title"    />
         <result property="docUrl"    column="doc_url"    />
         <result property="deptId"    column="dept_id"    />
         <result property="docDate"    column="doc_date"    />
+        <association property="dept"     column="dept_id" javaType="SysDept" resultMap="deptResult" />
     </resultMap>
+    <resultMap id="deptResult" type="SysDept">
+        <id     property="deptId"    column="dept_id"     />
+        <result property="parentId"  column="parent_id"   />
+        <result property="deptName"  column="dept_name"   />
+        <result property="ancestors" column="ancestors"   />
+        <result property="orderNum"  column="order_num"   />
+        <result property="leader"    column="leader"      />
+        <result property="status"    column="dept_status" />
 
+    </resultMap>
     <sql id="selectDocManagerVo">
-        select id, doc_order, doc_title, doc_url, dept_id, doc_date from tjdw_doc_manager
+        select id, doc_order, doc_title,doc_url, dept_id, doc_date from tjdw_doc_manager
     </sql>
 
     <select id="selectDocManagerList" parameterType="DocManager" resultMap="DocManagerResult">
-        <include refid="selectDocManagerVo"/>
+<!--        <include refid="selectDocManagerVo"/>-->
+        select id, doc_order, doc_title, doc_url, tjdw_doc_manager.dept_id, doc_date, d.dept_name from tjdw_doc_manager
+        left join sys_dept d on tjdw_doc_manager.dept_id = d.dept_id
         <where>  
             <if test="docOrder != null  and docOrder != ''"> and doc_order = #{docOrder}</if>
             <if test="docTitle != null  and docTitle != ''"> and doc_title = #{docTitle}</if>
             <if test="docUrl != null  and docUrl != ''"> and doc_url = #{docUrl}</if>
             <if test="deptId != null "> and dept_id = #{deptId}</if>
+<!--            <if test="deptId != null and deptId != 0">-->
+<!--                AND (dept_id = #{deptId} OR dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET (#{deptId},ancestors) ))-->
+<!--            </if>-->
             <if test="docDate != null "> and doc_date = #{docDate}</if>
         </where>
+        ${params.dataScope}
     </select>
-    
     <select id="selectDocManagerById" parameterType="Long" resultMap="DocManagerResult">
         <include refid="selectDocManagerVo"/>
         where id = #{id}

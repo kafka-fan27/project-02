@@ -7,36 +7,36 @@
      <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <label>发文号：</label>
-                                <input type="text" name="docOrder"/>
-                            </li>
-                            <li>
-                                <label>公文标题：</label>
-                                <input type="text" name="docTitle"/>
-                            </li>
-                            <li>
-                                <label>公文保存地址：</label>
-                                <input type="text" name="docUrl"/>
-                            </li>
-                            <li>
-                                <label>发文部门id：</label>
-                                <input type="text" name="deptId"/>
-                            </li>
-                            <li>
-                                <label>发文日期：</label>
-                                <input type="text" class="time-input" placeholder="请选择发文日期" name="docDate"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
+<!--                <form id="formId">-->
+<!--                    <div class="select-list">-->
+<!--                        <ul>-->
+<!--                            <li>-->
+<!--                                <label>发文号：</label>-->
+<!--                                <input type="text" name="docOrder"/>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <label>公文标题：</label>-->
+<!--                                <input type="text" name="docTitle"/>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <label>公文保存地址：</label>-->
+<!--                                <input type="text" name="docUrl"/>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <label>发文部门id：</label>-->
+<!--                                <input type="text" name="deptId"/>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <label>发文日期：</label>-->
+<!--                                <input type="text" class="time-input" placeholder="请选择发文日期" name="docDate"/>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>-->
+<!--                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </form>-->
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
@@ -71,6 +71,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
+                sendUrl: prefix + "/sendDoc",
                 modalName: "公文签收",
                 columns: [{
                     checkbox: true
@@ -86,15 +87,19 @@
                 },
                 {
                     field: 'docTitle',
-                    title: '公文标题'
+                    title: '公文标题',
                 },
+                // {
+                //     field: 'docUrl',
+                //     title: '公文保存地址'
+                // },
+                // {
+                //     field: 'deptId',
+                //     title: '发文部门id'
+                // },
                 {
-                    field: 'docUrl',
-                    title: '公文保存地址'
-                },
-                {
-                    field: 'deptId',
-                    title: '发文部门id'
+                    field: 'dept.deptName',
+                    title: '部门'
                 },
                 {
                     field: 'docDate',
@@ -105,8 +110,10 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        // actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs" onclick=$.modal.openOptions()><i class="fa fa-edit"></i> 签收</a>');
+                        actions.push('<a class="btn btn-success btn-xs" onclick=$.modal.msg("默认提示")><i class="fa fa-edit"></i> 转发</a>');
                         return actions.join('');
                     }
                 }]
